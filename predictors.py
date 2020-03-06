@@ -49,27 +49,28 @@ class LightGBMPredictor(BasePredictor):
     def _train_fn(self, X, y):
         for c in self.categorical:
             X[c] = X[c].astype('category')
-        parameters = {'n_estimators': 10000,
-                 'num_leaves': 32,
-                 'min_child_weight': 0.034,
-                 'feature_fraction': 0.379,
-                 'bagging_fraction': 0.418,
-                 'min_data_in_leaf': 106,
-                 'objective': 'binary',
-                 'max_depth': -1,
-                 'learning_rate': 0.0068,
-                 "boosting_type": "gbdt",
-                 # "bagging_seed": 11,
-                 "metric": 'binary_logloss',
-                 "verbosity": 10,
-                 'reg_alpha': 0.3899,
-                 'reg_lambda': 0.648,
-                 'random_state': 47,
-                 'task': 'train', 'nthread': -1,
-                 'verbose': 1000,
-                 'early_stopping_rounds': 500,
-                 'eval_metric': 'binary_logloss'
-                 }
+        parameters = {
+            'n_estimators': 10000,
+            'num_leaves': 21,
+            'min_child_weight': 0.034,
+            'feature_fraction': 0.379,
+            'bagging_fraction': 0.418,
+            'min_data_in_leaf': 106,
+            'objective': 'binary',
+            'max_depth': 55,
+            'learning_rate': 0.0068,
+            "boosting_type": "gbdt",
+            # "bagging_seed": 11,
+            "metric": 'binary_logloss',
+            "verbosity": 10,
+            'reg_alpha': 0.3899,
+            'reg_lambda': 0.648,
+            'random_state': 47,
+            'task': 'train', 'nthread': -1,
+            'verbose': 1000,
+            'early_stopping_rounds': 500,
+            'eval_metric': 'binary_logloss'
+        }
         X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.1, random_state=42)
         train_dataset = lightgbm.Dataset(X_train, label=y_train, categorical_feature=self.categorical)
         val_dataset = lightgbm.Dataset(X_val, label=y_val, categorical_feature=self.categorical)

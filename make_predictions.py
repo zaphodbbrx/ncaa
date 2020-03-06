@@ -12,7 +12,7 @@ feats_csv = [
     ('wins', 'features/record.csv'),
     ('seed', 'features/seeds.csv')
 ]
-predictor = LightGBMPredictor(['coach_x', 'coach_y'])
+predictor = LightGBMPredictor(['away_team', 'home_team', 'coach_x', 'coach_y'])
 # predictor = SklearnPredictor()
 games_df = pd.read_csv('./features/games.csv')
 feats_df = games_df
@@ -22,7 +22,7 @@ for feature, csv in feats_csv:
     feats_df = feats_df.drop(['team'], axis=1)
     feats_df = pd.merge(feats_df, df, left_on=['year', 'away_team'], right_on=['year', 'team'])
     feats_df = feats_df.drop(['team'], axis=1)
-feats_df = feats_df.drop(['year', 'home_team', 'away_team'], axis=1)
+# feats_df = feats_df.drop(['year', 'home_team', 'away_team'], axis=1)
 features = feats_df.drop('result', axis=1)
 targets = feats_df.result.values.astype(np.uint8)
 predictor.train(features, targets)
@@ -45,7 +45,7 @@ for feature, csv in feats_csv:
     feats_df_test = feats_df_test.drop(['team'], axis=1)
     feats_df_test = feats_df_test.sort_values(by='index')
 feats_df_test = feats_df_test.drop(['index'], axis=1)
-feats_df_test = feats_df_test.drop(['year', 'home_team', 'away_team'], axis=1)
+# feats_df_test = feats_df_test.drop(['year', 'home_team', 'away_team'], axis=1)
 submission.Pred = predictor(feats_df_test)
 submission.to_csv('./submission.csv', index=False)
 pass
